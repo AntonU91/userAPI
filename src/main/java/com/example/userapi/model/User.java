@@ -8,10 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
 import java.time.LocalDate;
-import java.util.Date;
 import lombok.Data;
 
 @Entity
@@ -41,8 +38,7 @@ public class User {
     @Column(name = "address")
     private String address;
 
-    @Pattern(regexp = "^\\d{10}$", message = "Phone number must be 10 digits")
+    //    @Pattern(regexp = "^\\d{10}$", message = "Phone number must be 10 digits")
     @Column(name = "phone_number")
     private String phoneNumber;
-
 }
