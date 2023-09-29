@@ -1,6 +1,7 @@
 package com.example.userapi.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -12,6 +13,7 @@ import com.example.userapi.mapper.UserMapper;
 import com.example.userapi.model.User;
 import com.example.userapi.repository.UserRepository;
 import com.example.userapi.service.impl.UserServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +29,8 @@ import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
-    public static final long USER_ID = 1L;
+    private static final long USER_ID = 1L;
+    private static final long NON_EXISTED_ID = 100L;
     @Mock
     private UserRepository userRepository;
 
@@ -91,11 +94,24 @@ class UserServiceTest {
     }
 
     @Test
+    public void updateAllUserProperties_NonExistedUserId_UpdateAllUserProperties() {
+        when(userRepository.findById(NON_EXISTED_ID)).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> userService.updateAllProperties(new UserRequestDto(), NON_EXISTED_ID));
+    }
+
+
+    @Test
     public void deleteUserById_ExistedId_DeleteUser() {
         User existingUser = new User();
         when(userRepository.findById(USER_ID)).thenReturn(Optional.of(existingUser));
         userService.delete(USER_ID);
         verify(userRepository, times(1)).delete(existingUser);
+    }
+
+    @Test
+    public void deleteUserById_NonExistedId_ThrowEntityNotFoundException() {
+        when(userRepository.findById(NON_EXISTED_ID)).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> userService.delete(NON_EXISTED_ID));
     }
 
     @Test

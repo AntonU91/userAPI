@@ -148,7 +148,6 @@ class UserControllerTest {
     void getAllUsersBySpecifiedBirthData_ValidBirthDateRange_Ok() throws Exception {
         LocalDate from = LocalDate.of(1990, 1, 1);
         LocalDate to = LocalDate.of(1996, 1, 1);
-
         MvcResult mvcResult =
                 mockMvc.perform(MockMvcRequestBuilders.get("/api/users?from={from}&to={to}", from, to)
                                         .contentType(MediaType.APPLICATION_JSON))
