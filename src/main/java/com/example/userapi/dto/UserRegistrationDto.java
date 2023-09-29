@@ -1,5 +1,6 @@
 package com.example.userapi.dto;
 
+import com.example.userapi.validation.BirthDate;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +20,7 @@ public class UserRegistrationDto {
     private String lastName;
 
     @NotNull
+    @BirthDate
     private LocalDate birthDate;
 
     private String address;
