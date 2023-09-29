@@ -13,6 +13,7 @@ import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override public void updateSomeProperties(UserUpdateDto userUpdateDto, Long userId) {
         User user = checkAndReturnUserById(userId);
-        User updatedUser = setNewProperties(user, userUpdateDto);
+        User updatedUser = updateUser(user, userUpdateDto);
         userRepository.save(updatedUser);
     }
 
@@ -68,7 +69,7 @@ public class UserServiceImpl implements UserService {
                                "Can not find user with id: " + userId));
     }
 
-    private User setNewProperties(User user, UserUpdateDto userUpdateDto) throws InvalidUserBirhDateException {
+    private User updateUser(User user, UserUpdateDto userUpdateDto) throws InvalidUserBirhDateException {
         checkAndUpdateBirthDate(user, userUpdateDto);
         if (userUpdateDto.getAddress() != null) {
             user.setAddress(userUpdateDto.getAddress());
