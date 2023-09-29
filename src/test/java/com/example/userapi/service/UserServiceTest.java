@@ -1,7 +1,6 @@
 package com.example.userapi.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,12 +16,10 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -110,7 +107,7 @@ class UserServiceTest {
         LocalDate from = LocalDate.of(1990, 1, 1);
         LocalDate to = LocalDate.of(2000, 12, 31);
         Pageable pageable = Pageable.unpaged();
-        Page<User> userPage = new PageImpl<>(Arrays.asList(user1,user2));
+        Page<User> userPage = new PageImpl<>(Arrays.asList(user1, user2));
 
         when(userRepository.findAllByBirthDateRange(from, to, pageable)).thenReturn(userPage);
         List<UserResponseDto> userResponseList =
