@@ -26,10 +26,8 @@ public class User {
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
-
     @Column(name = "last_name", nullable = false)
     private String lastName;
-
 
     @Temporal(TemporalType.DATE)
     @Column(name = "birth_date", nullable = false)
@@ -38,7 +36,6 @@ public class User {
     @Column(name = "address")
     private String address;
 
-    //    @Pattern(regexp = "^\\d{10}$", message = "Phone number must be 10 digits")
     @Column(name = "phone_number")
     private String phoneNumber;
 }

@@ -8,19 +8,14 @@ import java.time.LocalDate;
 import lombok.Data;
 
 @Data
-public class UserRegistrationDto {
-    @NotEmpty
+public class UserUpdateDto {
     @Email
     private String email;
 
-    @NotEmpty
     private String firstName;
 
-    @NotEmpty
     private String lastName;
 
-    @NotNull
-    @BirthDate
     private LocalDate birthDate;
 
     private String address;
