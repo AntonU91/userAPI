@@ -15,6 +15,8 @@ import java.time.Period;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,6 +35,7 @@ public class UserServiceImpl implements UserService {
     @Override public void updateAllProperties(UserRequestDto userRequestDto, Long userId) {
         checkAndReturnUserById(userId);
         User userToUpdate = userMapper.toUser(userRequestDto);
+        userToUpdate.setId(userId);
         userRepository.save(userToUpdate);
     }
 
@@ -48,11 +51,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponseDto> getUsersBySpecifedDateBirthRange(LocalDate from, LocalDate to) throws InvalidDateRangeException {
+    public List<UserResponseDto> getUsersBySpecifedBirthDateRange(LocalDate from, LocalDate to, Pageable pageable) throws InvalidDateRangeException {
         if (!to.isAfter(from)) {
             throw new InvalidDateRangeException("Invalid date range");
         }
-        List<User> userList = userRepository.findAllByBirthDateRange(from, to);
+        Page<User> userList = userRepository.findAllByBirthDateRange(from, to, pageable);
         return userList.stream()
                        .map(userMapper::toResponseDto)
                        .toList();
