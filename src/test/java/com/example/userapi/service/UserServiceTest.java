@@ -1,11 +1,5 @@
 package com.example.userapi.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.example.userapi.dto.UserRequestDto;
 import com.example.userapi.dto.UserResponseDto;
 import com.example.userapi.exception.InvalidDateRangeException;
@@ -14,10 +8,7 @@ import com.example.userapi.model.User;
 import com.example.userapi.repository.UserRepository;
 import com.example.userapi.service.impl.UserServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,6 +17,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -39,9 +39,19 @@ class UserServiceTest {
 
     @InjectMocks
     private UserServiceImpl userService;
+    UserRequestDto validUserRequestDto;
+
+    @BeforeEach
+    void setUp() {
+        validUserRequestDto = new UserRequestDto();
+        validUserRequestDto.setEmail("test@user.net");
+        validUserRequestDto.setBirthDate(LocalDate.of(1999, 2, 25));
+        validUserRequestDto.setFirstName("Test name");
+        validUserRequestDto.setLastName("Test surname");
+    }
 
     @Test
-    public void createUser_ValidUserRequestDto_CreateUser() {
+    void createUser_ValidUserRequestDto_CreateUser() {
         User user = new User();
         user.setId(USER_ID);
         user.setEmail("test@user.net");
@@ -49,25 +59,15 @@ class UserServiceTest {
         user.setFirstName("Test name");
         user.setLastName("Test surname");
 
-        UserRequestDto validUserRequestDto = new UserRequestDto();
-        validUserRequestDto.setEmail("test@user.net");
-        validUserRequestDto.setBirthDate(LocalDate.of(1999, 2, 25));
-        validUserRequestDto.setFirstName("Test name");
-        validUserRequestDto.setLastName("Test surname");
         when(userMapper.toUser(validUserRequestDto)).thenReturn(user);
+        when(userRepository.save(user)).thenReturn(user);
 
         userService.create(validUserRequestDto);
         verify(userRepository, times(1)).save(user);
     }
 
     @Test
-    public void updateAllUserProperties_ValidUserRequestDto_UpdateAllUserProperties() {
-        UserRequestDto validUserRequestDto = new UserRequestDto();
-        validUserRequestDto.setEmail("test@user.net");
-        validUserRequestDto.setBirthDate(LocalDate.of(1999, 2, 25));
-        validUserRequestDto.setFirstName("Test name");
-        validUserRequestDto.setLastName("Test surname");
-
+    void updateAllUserProperties_ValidUserRequestDto_UpdateAllUserProperties() {
         User existingUser = new User();
         existingUser.setId(USER_ID);
         existingUser.setEmail("test@user.net");
@@ -94,14 +94,14 @@ class UserServiceTest {
     }
 
     @Test
-    public void updateAllUserProperties_NonExistedUserId_UpdateAllUserProperties() {
+    void updateAllUserProperties_NonExistedUserId_UpdateAllUserProperties() {
         when(userRepository.findById(NON_EXISTED_ID)).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> userService.updateAllProperties(new UserRequestDto(), NON_EXISTED_ID));
     }
 
 
     @Test
-    public void deleteUserById_ExistedId_DeleteUser() {
+    void deleteUserById_ExistedId_DeleteUser() {
         User existingUser = new User();
         when(userRepository.findById(USER_ID)).thenReturn(Optional.of(existingUser));
         userService.delete(USER_ID);
@@ -109,13 +109,13 @@ class UserServiceTest {
     }
 
     @Test
-    public void deleteUserById_NonExistedId_ThrowEntityNotFoundException() {
+    void deleteUserById_NonExistedId_ThrowEntityNotFoundException() {
         when(userRepository.findById(NON_EXISTED_ID)).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> userService.delete(NON_EXISTED_ID));
     }
 
     @Test
-    public void getUsersBySpecifiedBirthDateRange_ValidBirthDataRange_ReturnUserResponseDtoList() throws InvalidDateRangeException {
+    void getUsersBySpecifiedBirthDateRange_ValidBirthDataRange_ReturnUserResponseDtoList() throws InvalidDateRangeException {
         User user1 = new User();
         User user2 = new User();
         UserResponseDto userResponseDto1 = new UserResponseDto();
@@ -136,5 +136,4 @@ class UserServiceTest {
 
         assertEquals(userResponseList.size(), result.size());
     }
-
 }
