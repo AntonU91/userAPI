@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BirthDate {
-    String message() default "Age should be minimum 18 years";
+    String message() default "Age should be minimum 19 years";
 
     Class<?>[] groups() default {};
 

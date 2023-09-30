@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
             if (isValidBirthDate(userUpdateDto.getBirthDate())) {
                 user.setBirthDate(userUpdateDto.getBirthDate());
             } else {
-                throw new InvalidUserBirhDateException("Invalid user birth date. Should be at least 18 years");
+                throw new InvalidUserBirhDateException("Invalid user birth date. Should be at least 19 years");
             }
         }
     }
