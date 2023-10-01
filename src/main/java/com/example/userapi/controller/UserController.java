@@ -2,7 +2,7 @@ package com.example.userapi.controller;
 
 import com.example.userapi.dto.UserRequestDto;
 import com.example.userapi.dto.UserResponseDto;
-import com.example.userapi.dto.UserUpdateDto;
+import com.example.userapi.dto.UserUpdateRequestDto;
 import com.example.userapi.service.UserService;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
@@ -44,9 +44,9 @@ public class UserController {
 
     @PatchMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    private void updateSomeProperties(@RequestBody @Valid UserUpdateDto userUpdateDto,
+    private void updateSomeProperties(@RequestBody @Valid UserUpdateRequestDto userUpdateRequestDto,
             @PathVariable(name = "userId") Long userId) {
-        userService.updateSomeProperties(userUpdateDto, userId);
+        userService.updateSomeProperties(userUpdateRequestDto, userId);
     }
 
     @DeleteMapping("/{userId}")

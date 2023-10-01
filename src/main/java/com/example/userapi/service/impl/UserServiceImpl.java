@@ -2,7 +2,7 @@ package com.example.userapi.service.impl;
 
 import com.example.userapi.dto.UserRequestDto;
 import com.example.userapi.dto.UserResponseDto;
-import com.example.userapi.dto.UserUpdateDto;
+import com.example.userapi.dto.UserUpdateRequestDto;
 import com.example.userapi.exception.InvalidDateRangeException;
 import com.example.userapi.exception.InvalidUserBirhDateException;
 import com.example.userapi.mapper.UserMapper;
@@ -13,7 +13,7 @@ import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
-import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -40,9 +40,9 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userToUpdate);
     }
 
-    @Override public void updateSomeProperties(UserUpdateDto userUpdateDto, Long userId) {
+    @Override public void updateSomeProperties(UserUpdateRequestDto userUpdateRequestDto, Long userId) {
         User user = checkAndReturnUserById(userId);
-        User updatedUser = updateUser(user, userUpdateDto);
+        User updatedUser = updateUser(user, userUpdateRequestDto);
         userRepository.save(updatedUser);
     }
 
@@ -69,31 +69,31 @@ public class UserServiceImpl implements UserService {
                                "Can not find user with id: " + userId));
     }
 
-    private User updateUser(User user, UserUpdateDto userUpdateDto) throws InvalidUserBirhDateException {
-        checkAndUpdateBirthDate(user, userUpdateDto);
-        if (userUpdateDto.getAddress() != null) {
-            user.setAddress(userUpdateDto.getAddress());
+    private User updateUser(User user, UserUpdateRequestDto userUpdateRequestDto) throws InvalidUserBirhDateException {
+        checkAndUpdateBirthDate(user, userUpdateRequestDto);
+        if (userUpdateRequestDto.getAddress() != null) {
+            user.setAddress(userUpdateRequestDto.getAddress());
         }
-        if (userUpdateDto.getEmail() != null) {
-            user.setEmail(userUpdateDto.getEmail());
+        if (userUpdateRequestDto.getEmail() != null) {
+            user.setEmail(userUpdateRequestDto.getEmail());
         }
-        if (userUpdateDto.getFirstName() != null) {
-            user.setFirstName(userUpdateDto.getFirstName());
+        if (userUpdateRequestDto.getFirstName() != null) {
+            user.setFirstName(userUpdateRequestDto.getFirstName());
         }
-        if (userUpdateDto.getLastName() != null) {
-            user.setLastName(userUpdateDto.getLastName());
+        if (userUpdateRequestDto.getLastName() != null) {
+            user.setLastName(userUpdateRequestDto.getLastName());
         }
 
-        if (userUpdateDto.getPhoneNumber() != null) {
-            user.setPhoneNumber(userUpdateDto.getPhoneNumber());
+        if (userUpdateRequestDto.getPhoneNumber() != null) {
+            user.setPhoneNumber(userUpdateRequestDto.getPhoneNumber());
         }
         return user;
     }
 
-    private void checkAndUpdateBirthDate(User user, UserUpdateDto userUpdateDto) {
-        if (userUpdateDto.getBirthDate() != null) {
-            if (isValidBirthDate(userUpdateDto.getBirthDate())) {
-                user.setBirthDate(userUpdateDto.getBirthDate());
+    private void checkAndUpdateBirthDate(User user, UserUpdateRequestDto userUpdateRequestDto) {
+        if (userUpdateRequestDto.getBirthDate() != null) {
+            if (isValidBirthDate(userUpdateRequestDto.getBirthDate())) {
+                user.setBirthDate(userUpdateRequestDto.getBirthDate());
             } else {
                 throw new InvalidUserBirhDateException("Invalid user birth date. Should be at least 19 years");
             }

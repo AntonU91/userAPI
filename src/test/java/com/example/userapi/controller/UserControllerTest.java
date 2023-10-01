@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.userapi.dto.UserRequestDto;
 import com.example.userapi.dto.UserResponseDto;
-import com.example.userapi.dto.UserUpdateDto;
+import com.example.userapi.dto.UserUpdateRequestDto;
 import com.example.userapi.mapper.UserMapper;
 import com.example.userapi.model.User;
 import com.example.userapi.repository.UserRepository;
@@ -110,7 +110,7 @@ class UserControllerTest {
     @Sql(scripts = {"classpath:db/after/delete-users-table-users.sql"},
          executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void updateSomeUserProperties_ValidUserUpdateDto_Ok() throws Exception {
-        UserUpdateDto validUpdateDto = new UserUpdateDto();
+        UserUpdateRequestDto validUpdateDto = new UserUpdateRequestDto();
         LocalDate expected = LocalDate.of(2001, 1, 2);
         validUpdateDto.setBirthDate(expected);
 
@@ -129,7 +129,7 @@ class UserControllerTest {
     @Sql(scripts = {"classpath:db/after/delete-users-table-users.sql"},
          executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void updateSomeUserProperties_InvalidUserUpdateDto_BadRequest() throws Exception {
-        UserUpdateDto invalidUpdateDto = new UserUpdateDto();
+        UserUpdateRequestDto invalidUpdateDto = new UserUpdateRequestDto();
         LocalDate invalidDate = LocalDate.of(2222, 1, 2);
         invalidUpdateDto.setBirthDate(invalidDate);
 

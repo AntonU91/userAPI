@@ -2,7 +2,7 @@ package com.example.userapi.service;
 
 import com.example.userapi.dto.UserRequestDto;
 import com.example.userapi.dto.UserResponseDto;
-import com.example.userapi.dto.UserUpdateDto;
+import com.example.userapi.dto.UserUpdateRequestDto;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +13,7 @@ public interface UserService {
 
     void updateAllProperties(UserRequestDto userRequestDto, Long userId);
 
-    void updateSomeProperties(UserUpdateDto userUpdateDto, Long userId);
+    void updateSomeProperties(UserUpdateRequestDto userUpdateRequestDto, Long userId);
 
     void delete(Long userId);
 
