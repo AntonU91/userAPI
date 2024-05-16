@@ -4,7 +4,7 @@ import com.example.userapi.dto.UserRequestDto;
 import com.example.userapi.dto.UserResponseDto;
 import com.example.userapi.dto.UserUpdateRequestDto;
 import com.example.userapi.exception.InvalidDateRangeException;
-import com.example.userapi.exception.InvalidUserBirhDateException;
+import com.example.userapi.exception.InvalidUserBirthDateException;
 import com.example.userapi.mapper.UserMapper;
 import com.example.userapi.model.User;
 import com.example.userapi.repository.UserRepository;
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
                                "Can not find user with id: " + userId));
     }
 
-    private User updateUser(User user, UserUpdateRequestDto userUpdateRequestDto) throws InvalidUserBirhDateException {
+    private User updateUser(User user, UserUpdateRequestDto userUpdateRequestDto) throws InvalidUserBirthDateException {
         checkAndUpdateBirthDate(user, userUpdateRequestDto);
         if (userUpdateRequestDto.getAddress() != null) {
             user.setAddress(userUpdateRequestDto.getAddress());
@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
             if (isValidBirthDate(userUpdateRequestDto.getBirthDate())) {
                 user.setBirthDate(userUpdateRequestDto.getBirthDate());
             } else {
-                throw new InvalidUserBirhDateException("Invalid user birth date. Should be at least 19 years");
+                throw new InvalidUserBirthDateException("Invalid user birth date. Should be at least 19 years");
             }
         }
     }

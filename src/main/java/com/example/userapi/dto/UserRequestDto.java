@@ -26,6 +26,5 @@ public class UserRequestDto {
 
     private String address;
 
-    //@Pattern(regexp = "\\d{8,}",message = "Invalid phone number")
     private String phoneNumber;
 }

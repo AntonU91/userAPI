@@ -19,13 +19,17 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
+    private static final String TIMESTAMP = "timestamp";
+    private static final String STATUS = "status";
+    private static final String ERROR = "error";
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status,
             WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.BAD_REQUEST);
+        body.put(TIMESTAMP, LocalDateTime.now());
+        body.put(STATUS, HttpStatus.BAD_REQUEST);
         List<String> errors = ex.getBindingResult().getAllErrors().stream()
                                       .map(e -> getErrorMessage(e))
                                       .toList();
@@ -44,28 +48,28 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
     @ExceptionHandler(value = {EntityNotFoundException.class})
     protected ResponseEntity<Object> handleEntityNotFoundException(RuntimeException exception) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.NOT_FOUND);
-        body.put("error", exception.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+        Map<String, Object> errorResponseBody = new LinkedHashMap<>();
+        errorResponseBody.put(TIMESTAMP, LocalDateTime.now());
+        errorResponseBody.put(STATUS, HttpStatus.NOT_FOUND);
+        errorResponseBody.put(ERROR, exception.getMessage());
+        return new ResponseEntity<>(errorResponseBody, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = {InvalidUserBirhDateException.class})
+    @ExceptionHandler(value = {InvalidUserBirthDateException.class})
     protected ResponseEntity<Object> handleInvalidBirthDateException(RuntimeException exception) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.BAD_REQUEST);
-        body.put("error", exception.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        Map<String, Object> errorResponseBody = new LinkedHashMap<>();
+        errorResponseBody.put(TIMESTAMP, LocalDateTime.now());
+        errorResponseBody.put(STATUS, HttpStatus.BAD_REQUEST);
+        errorResponseBody.put(ERROR, exception.getMessage());
+        return new ResponseEntity<>(errorResponseBody, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = {InvalidDateRangeException.class})
     protected ResponseEntity<Object> handleInvalidBirthDateRangeException(RuntimeException exception) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.BAD_REQUEST);
-        body.put("error", exception.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        Map<String, Object> errorResponseBody = new LinkedHashMap<>();
+        errorResponseBody.put(TIMESTAMP, LocalDateTime.now());
+        errorResponseBody.put(STATUS, HttpStatus.BAD_REQUEST);
+        errorResponseBody.put(ERROR, exception.getMessage());
+        return new ResponseEntity<>(errorResponseBody, HttpStatus.BAD_REQUEST);
     }
 }
